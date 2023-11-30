@@ -28,14 +28,14 @@ describe("Register route", () => {
         const { body, statusCode } = await supertest(app)
           .post("/api/user/signup")
           .send({
-            firstName: "testuser",
-            lastName: "testpassword",
-            email: "adedibuprecious@gmail.com",
-            password: "Sharingan066@",
-            confirmPassword: "Sharingan066@",
+            firstName: "Preshy",
+            lastName: "Jones",
+            email: "preshyjones@gmail.com",
+            password: "Password1234@",
+            confirmPassword: "Password1234@",
           });
 
-        expect(statusCode).toBe(200);
+        expect(statusCode).toBe(201);
         expect(body.message).toBe("User registered successfully");
       });
     });
