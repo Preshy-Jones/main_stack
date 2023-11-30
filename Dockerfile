@@ -18,6 +18,5 @@ COPY . .
 # Build the TypeScript code
 RUN yarn run build
 
-
 EXPOSE 8000
 CMD [ "yarn", "start" ]
