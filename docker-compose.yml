@@ -1,0 +1,48 @@
+version: '3'
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: preshy
+      MONGO_INITDB_ROOT_PASSWORD: shakalakaboomboom
+      MONGO_INITDB_DATABASE: mainstack
+    volumes:
+            #Adding volume makes sure that data is persistant and wont get deleted after your docker stops
+            #Everytime this mongodb service starts data from your system mongo-data gets replicated to /data/db folder inside docker container
+          - mongo-data:/data/db
+    networks:
+          #Adding network makes sure that we can operate with our API's like local setup
+          - mainstack
+  nodejs-api:
+    container_name: mainstack_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    volumes:
+    #Map your system local project files and folders to docker container /usr/app 
+    - .:/usr/app/
+    - ./node_modules:/usr/app/node_modules
+    networks:
+      #Adding network makes sure that we can operate with our API's like local setup
+      - mainstack
+    depends_on:
+      - mongodb
+
+
+
+#Networks are used to make sure that all the services can interoperate with ease
+networks:
+    mainstack:
+        driver: bridge
+
+#Volumes are used to persist the data even after docker restart
+volumes:
+    mongo-data:
+        driver: local
+    api:
+        driver: local

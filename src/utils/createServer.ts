@@ -1,7 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import compression from "compression";
-import { errorHandler, notFoundHandler } from "../middlewares/errors";
+import authRoutes from "../routes/auth";
+import userRoutes from "../routes/user";
+import passport from "passport";
+import passportStrategy from "../middlewares/passport";
 
 function createServer() {
   const app = express();
@@ -10,14 +13,17 @@ function createServer() {
   app.use(express.json());
   app.use(compression());
 
+  app.use(passport.initialize());
+  passport.use(passportStrategy);
+
   app.get("/", (req: Request, res: any) => {
     res.json({
-      msg: "Test Delivery Service...",
+      msg: "Mainstack...",
     });
   });
 
-  app.use(notFoundHandler);
-  app.use(errorHandler);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/user", userRoutes);
 
   return app;
 }

@@ -8,7 +8,7 @@ WORKDIR /usr/src/motopay-ecommerce
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
+RUN yarn install
 # If you are building your code for production
 # RUN npm ci --only=production
 
@@ -16,8 +16,8 @@ RUN npm install
 COPY . .
 
 # Build the TypeScript code
-RUN npm run build
+RUN yarn run build
 
 
 EXPOSE 8000
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
