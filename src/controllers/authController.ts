@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { LoginInput } from "../validation/auth.schema";
 import { successResponse } from "../utils";
-import { loginService } from "../services";
+import { LoginService } from "../services";
 
 export const loginHandler = async (
   req: Request<{}, {}, LoginInput["body"]>,
@@ -10,11 +10,9 @@ export const loginHandler = async (
 ) => {
   try {
     const { email, password } = req.body;
-    const response = await loginService(email, password);
+    const response = await LoginService(email, password);
     return res.send(successResponse("Logged in successfully", response));
   } catch (error) {
     next(error);
   }
 };
-
-

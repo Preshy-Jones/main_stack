@@ -11,8 +11,7 @@ app.get("/", (req: Request, res: any) => {
   });
 });
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+
 
 connectDB();
 const PORT = process.env.PORT || 8001;

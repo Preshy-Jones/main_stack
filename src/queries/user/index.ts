@@ -1,18 +1,18 @@
-import { Prisma, PrismaClient, User } from "@prisma/client";
-const prisma = new PrismaClient();
+import { DocumentDefinition, FilterQuery } from "mongoose";
+import UserModel, { UserDocument } from "../../models/User";
+import { omit } from "lodash";
 
-export const userFindFirst = async (
-  where: Prisma.UserWhereInput,
-  include?: Prisma.UserInclude
-): Promise<User | null> => {
-  return prisma.user.findFirst({
-    where,
-    ...(include && { include }),
-  });
-};
 
-export const userCreate = async (
-  data: Prisma.UserCreateInput
-): Promise<User> => {
-  return prisma.user.create({ data });
-};
+export async function createUser(
+  input: DocumentDefinition<
+    Omit<UserDocument, "createdAt" | "updatedAt" | "comparePassword">
+  >
+) {
+  try {
+    const user = await UserModel.create(input);
+
+    return omit(user.toJSON(), "password");
+  } catch (e: any) {
+    throw new Error(e);
+  }
+}

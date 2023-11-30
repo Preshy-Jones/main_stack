@@ -3,8 +3,17 @@ import createServer from "../utils/createServer";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import UserModel from "../models/User";
+import { createUser } from "../queries/user";
 
 const app = createServer();
+
+export const userPayload = {
+  // _id: userId,
+  email: "jane.doe@example.com",
+  firstName: "Jane",
+  lastName: "Doe",
+  password: "shajsjsk@kdS",
+};
 
 describe("login", () => {
   beforeAll(async () => {
@@ -23,44 +32,35 @@ describe("login", () => {
   });
 
   describe("Login route", () => {
+    describe("When valid credentials are provided", () => {
+      it("should return success", async () => {
+        const user = await createUser(userPayload);
+        const { body, statusCode } = await supertest(app)
+          .post("/api/auth/login")
+          .send({
+            email: "jane.doe@example.com",
+            password: "shajsjsk@kdS",
+          });
 
-    // describe("When valid credentials are provided", () => {
-    //   it("should return success", async () => {
-    //     const { body, statusCode } = await supertest(app)
-    //       .post("/api/auth/login")
-    //       .send({
-    //         email: "adedibuprecious@gmail.com",
-    //         password: "Sharingan066@",
-    //       });
+        expect(statusCode).toBe(200);
 
-    //     expect(statusCode).toBe(200);
+        expect(body.message).toBe("Logged in successfully");
+      });
+    });
+    describe("When invalid credentials are provided", () => {
+      it("should return unauthorized ", async () => {
+        const user = await createUser(userPayload);
+        const { body, statusCode } = await supertest(app)
+          .post("/api/auth/login")
+          .send({
+            email: userPayload.email,
+            password: "Wrongpassword!",
+          });
 
-    //     // console.log(
-    //     //   "hello there   there   there   there   there   therehello hellohello hello"
-    //     // );
-    //     // console.log(body);
-
-    //     expect(body.message).toBe("Logged in successfully");
-    //   });
-    // });
-    // describe("When invalid credentials are provided", () => {
-    //   it("should return unauthorized ", async () => {
-    //     const { body, statusCode } = await supertest(app)
-    //       .post("/api/auth/login")
-    //       .send({
-    //         email: "adedibuprecious@gmail.com",
-    //         password: "Sharingan066@",
-    //       });
-
-    //     console.log(
-    //       "hello hello hello hello hello hellohello hellohello hello"
-    //     );
-    //     console.log(body);
-
-    //     expect(statusCode).toBe(401);
-    //     expect(body.message).toBe("Invalid credentials");
-    //   });
-    // });
+        expect(statusCode).toBe(401);
+        expect(body.message).toBe("Invalid credential");
+      });
+    });
   });
 });
 

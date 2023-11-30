@@ -16,13 +16,14 @@ services:
     networks:
           #Adding network makes sure that we can operate with our API's like local setup
           - mainstack
-  nodejs-api:
+  mainstack_api:
     container_name: mainstack_api
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - '4000:4000'
+    command: yarn run dev
     volumes:
     #Map your system local project files and folders to docker container /usr/app 
     - .:/usr/app/

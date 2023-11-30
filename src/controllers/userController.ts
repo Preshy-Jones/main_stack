@@ -4,7 +4,7 @@ import { successResponse } from "../utils";
 import { SignUpInput } from "../validation/user.schema";
 import UserModel from "../models/User";
 import { ConflictError } from "../errors";
-import { createUser } from "../services/user/signUpUserServices";
+import SignUpService from "../services/user/signUpUserServices";
 
 export const signupHandler = async (
   req: Request<{}, {}, SignUpInput["body"]>,
@@ -14,8 +14,10 @@ export const signupHandler = async (
   try {
     const { email, firstName, lastName, password } = req.body;
 
-    const user = await createUser(req.body);
-    return res.send(successResponse("User registered successfully", user));
+    const user = await SignUpService(req.body);
+    return res
+      .status(201)
+      .send(successResponse("User registered successfully", user));
   } catch (error) {
     next(error);
   }

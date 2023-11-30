@@ -3,6 +3,7 @@ import UserModel from "../../models/User";
 // import { omit } from "lodash";
 import { generateJWTToken } from "../../utils";
 import config from "../../config";
+import { omit } from "lodash";
 
 export const loginService = async (email: string, password: string) => {
   const user = await validatePassword({ email, password });
@@ -39,11 +40,11 @@ const validatePassword = async ({
   const isValid = await user.comparePassword(password);
 
   if (!isValid) {
-    throw new AuthenticationError("Invalid credentials");
+    throw new AuthenticationError("Invalid credential");
   }
 
-  // return omit(user.toJSON(), "password", "createdAt", "updatedAt",);
-  return user;
+  return omit(user.toJSON(), "password", "createdAt", "updatedAt");
 };
+
 
 export default loginService;

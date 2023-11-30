@@ -1,7 +1,7 @@
 FROM node:16-alpine
 
 # Create app directory
-WORKDIR /usr/src/motopay-ecommerce
+WORKDIR /usr/src/mainstack-ecommerce
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
