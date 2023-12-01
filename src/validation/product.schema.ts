@@ -16,6 +16,17 @@ const payload = {
   }),
 };
 
+const updatePayload = {
+  body: object({
+    title: string().optional(),
+    description: string()
+      .min(50, "Description should be at least 50 characters long")
+      .optional(),
+    price: number().optional(),
+    imageUrl: string().optional(),
+  }).strict(),
+};
+
 const params = {
   params: object({
     productId: string({
@@ -29,7 +40,7 @@ export const createProductSchema = object({
 });
 
 export const updateProductSchema = object({
-  ...payload,
+  ...updatePayload,
   ...params,
 });
 

@@ -9,6 +9,7 @@ import {
 } from "../validation/product.schema";
 import {
   createProductHandler,
+  deleteProductHandler,
   getProductHandler,
   getProductsHandler,
   updateProductHandler,
@@ -37,9 +38,9 @@ router.get(
 router.delete(
   "/:productId",
   [ensureAuthenticated, validateResource(deleteProductSchema)],
-  getProductHandler
+  deleteProductHandler
 );
 
-// router.get("/", ensureAuthenticated, getProductsHandler);
+router.get("/", ensureAuthenticated, getProductsHandler);
 
 export default router;
