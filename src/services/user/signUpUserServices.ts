@@ -17,7 +17,7 @@ const SignUpService = async (
 
   const user = await createUser(input);
 
-  return omit(user.toJSON(), "password");
+  return user;
 };
 
 export default SignUpService;
