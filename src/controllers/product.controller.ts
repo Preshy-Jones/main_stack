@@ -25,7 +25,9 @@ export async function createProductHandler(
   try {
     const product = await createProduct({ ...body, user: userId });
 
-    return res.status(201).send(product);
+    return res
+      .status(201)
+      .send(successResponse("Product created successfully", product));
   } catch (error) {
     next(error);
   }
@@ -48,15 +50,19 @@ export async function updateProductHandler(
       throw new NotFoundError("Product not found");
     }
 
-    if (String(product.user) !== userId) {
-      throw new AuthorizationError("Unauthorized to update product");
+    console.log(product.user, userId);
+
+    if (userId && product.user.toString() !== userId.toString()) {
+      throw new AuthorizationError("You are unauthorized to update this product");
     }
 
     const updatedProduct = await findAndUpdateProduct({ productId }, update, {
       new: true,
     });
 
-    return res.send(updatedProduct);
+    return res.send(
+      successResponse("Product updated successfully", updatedProduct)
+    );
   } catch (error) {
     next(error);
   }
@@ -76,7 +82,7 @@ export async function getProductHandler(
     }
     //remove productId field from product and return product
     // const { productId, ...rest } = product;
-    return res.send(product);
+    return res.send(successResponse("Product retrieved successfully", product));
   } catch (error) {
     next(error);
   }
@@ -97,13 +103,13 @@ export async function deleteProductHandler(
       throw new NotFoundError("Product not found");
     }
 
-    if (String(product.user) !== userId) {
+    if (userId && product.user.toString() !== userId.toString()) {
       throw new AuthorizationError("You are unauthorized to delete product");
     }
 
     await deleteProduct({ productId });
 
-    return res.sendStatus(200);
+    return res.send(successResponse("Product deleted successfully", null));
   } catch (error) {
     next(error);
   }

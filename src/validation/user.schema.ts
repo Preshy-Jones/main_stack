@@ -1,49 +1,5 @@
 import { object, string, number, array, TypeOf } from "zod";
 
-/**
- * @openapi
- * components:
- *  schemas:
- *    CreateUserInput:
- *      type: object
- *      required:
- *        - email
- *        - firstName
- *        - lastName
- *        - password
- *        - confirmPassword
- *      properties:
- *        email:
- *          type: string
- *          default: jane.doe@example.com
- *        firstName:
- *          type: string
- *          default: Preshy
- *        lastName:
- *          type: string
- *          default: Jones
- *        password:
- *          type: string
- *          default: stringPassword123
- *        confirmPassword:
- *          type: string
- *          default: stringPassword123
- *    CreateUserResponse:
- *      type: object
- *      properties:
- *        email:
- *          type: string
- *        firstName:
- *          type: string
- *        lastName:
- *          type: string
- *        _id:
- *          type: string
- *        createdAt:
- *          type: string
- *        updatedAt:
- *          type: string
- */
 const payload = {
   body: object({
     email: string({
@@ -84,36 +40,3 @@ export const SignUpSchema = object({
 });
 
 export type SignUpInput = TypeOf<typeof SignUpSchema>;
-
-
-
-/**
- * @openapi
- * components:
- *   schemas:
- *     GetLoggedInUserResponse:
- *       type: array
- *       items:
- *         type: object
- *         required:
- *           - email
- *           - firstName
- *           - lastName
- *           - createdAt
- *           - updatedAt
- *         properties:
- *           _id:
- *             type: string
- *           email:
- *             type: string
- *           firstName:
- *             type: string
- *           lastName:
- *             type: string
- *           createdAt:
- *             type: string
- *           updatedAt:
- *             type: string
- *           __v:
- *             type: number
- */
