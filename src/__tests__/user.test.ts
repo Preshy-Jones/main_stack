@@ -3,8 +3,26 @@ import createServer from "../utils/createServer";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import UserModel from "../models/User";
+import * as UserService from "../queries/user/index";
 
 const app = createServer();
+
+const userId = new mongoose.Types.ObjectId().toString();
+
+const userPayload = {
+  _id: userId,
+  email: "jane.doe@example.com",
+  firstName: "Jane",
+  lastName: "Doe",
+};
+
+const userInput = {
+  email: "test@example.com",
+  firstName: "Jane",
+  lastName: "Doe",
+  password: "shajsjsk@kdS",
+  confirmPassword: "shajsjsk",
+};
 
 describe("Register route", () => {
   beforeAll(async () => {
@@ -39,13 +57,23 @@ describe("Register route", () => {
         expect(body.message).toBe("User registered successfully");
       });
     });
+   
+
+    describe("given the passwords do not match", () => {
+      it("should return a 400", async () => {
+        const createUserServiceMock = jest
+          .spyOn(UserService, "createUser")
+          // @ts-ignore
+          .mockReturnValueOnce(userPayload);
+
+        const { statusCode } = await supertest(app)
+          .post("/api/user/signup")
+          .send({ ...userInput, confirmPassword: "doesnotmatch" });
+
+        expect(statusCode).toBe(422);
+
+        expect(createUserServiceMock).not.toHaveBeenCalled();
+      });
+    });
   });
 });
-
-// function sum(a, b) {
-//   return a + b;
-// }
-
-// test("adds 1 + 2 to equal 3", () => {
-//   expect(sum(1, 2)).toBe(3);
-// });
